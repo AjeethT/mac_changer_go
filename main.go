@@ -36,7 +36,7 @@ func main() {
 	flag.Parse()
 
 	if interfaceName == "" || new_mac_address == "" {
-		fmt.Println("Error: Both interface and MAC address are required.", interfaceName, new_mac_address)
+		fmt.Println("Error: Both interface and MAC address are required.")
 		os.Exit(1)
 	}
 
