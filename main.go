@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -25,14 +26,19 @@ func execCommand(command string, arg ...string) error {
 func main() {
 	fmt.Println("Hello yet another Golang program! - MAC Changer")
 
-	var interfaceName string
-	var new_mac_address string
+	var interfaceName, new_mac_address string
+	flag.StringVar(&interfaceName, "interface", "", "Interface name to change MAC address  (e.g., eth0)  (required)")
+	flag.StringVar(&interfaceName, "i", "", "Short form of Interface name to change MAC address")
 
-	fmt.Println("Enter the interface name:")
-	fmt.Scanln(&interfaceName)
+	flag.StringVar(&new_mac_address, "mac", "", "New MAC address (e.g., 00:11:22:33:44:55)  (required)")
+	flag.StringVar(&new_mac_address, "m", "", "Short form of New MAC address")
 
-	fmt.Println("Enter the new MAC address:")
-	fmt.Scanln(&new_mac_address)
+	flag.Parse()
+
+	if interfaceName == "" || new_mac_address == "" {
+		fmt.Println("Error: Both interface and MAC address are required.", interfaceName, new_mac_address)
+		os.Exit(1)
+	}
 
 	execCommand("sudo", "ifconfig", interfaceName, "down")
 	execCommand("sudo", "ifconfig", interfaceName, "hw", "ether", new_mac_address)
